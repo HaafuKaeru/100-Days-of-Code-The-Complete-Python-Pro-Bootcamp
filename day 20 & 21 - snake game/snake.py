@@ -54,3 +54,8 @@ class Snake:
 
     def right(self):
         self._turn(RIGHT, LEFT)
+
+    def reset_snake(self):
+        for segment in self.segments:
+            segment.goto(1000, 1000)
+        self.__init__()
