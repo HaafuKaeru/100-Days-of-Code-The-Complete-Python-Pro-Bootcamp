@@ -25,6 +25,14 @@ code_dict = {row.letter: row.code for i, row in pd.read_csv("nato_phonetic_alpha
 # print(code_dict)
 
 #TODO 2. Create a list of the phonetic code words from a word that the user inputs.
-user_input = input(f"Enter your word: ")
-result = [code_dict[letter.upper()] for letter in user_input]
-print(result)
+def generate_phonetic():
+    user_input = input(f"Enter your word: ")
+    try:
+        result = [code_dict[letter.upper()] for letter in user_input]
+    except KeyError as e:
+        print("Sorry, please input only letters")
+        generate_phonetic()
+    else:
+        print(result)
+
+generate_phonetic()
