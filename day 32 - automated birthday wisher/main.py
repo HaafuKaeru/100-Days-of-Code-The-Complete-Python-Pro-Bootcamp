@@ -6,7 +6,7 @@ import smtplib
 
 
 MY_EMAIL = "pythont090.test@gmail.com"
-MY_PASSWORD = "lqkiwyqfzmzrtbgc"
+MY_PASSWORD = "xxx"
 SMTP_ADDRESS = "smtp.gmail.com"
 
 # 1. Update the birthdays.csv -> Done

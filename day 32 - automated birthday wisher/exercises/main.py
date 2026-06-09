@@ -4,7 +4,7 @@ import datetime as dt
 
 
 MY_EMAIL = "pythont090.test@gmail.com"
-MY_PASSWORD = "lqkiwyqfzmzrtbgc"
+MY_PASSWORD = "xxx"
 
 
 now = dt.datetime.now()
