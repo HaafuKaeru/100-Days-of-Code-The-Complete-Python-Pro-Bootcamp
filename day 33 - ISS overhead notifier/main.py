@@ -5,6 +5,7 @@ import smtplib
 
 ISS_POSITION_API = "http://api.open-notify.org/iss-now.json"
 SUNRISE_SUNSET_API = "https://api.sunrise-sunset.org/json"
+# lat lng to place converter: https://www.latlong.net/Show-Latitude-Longitude.html
 MY_LAT = 52.205338 # cambridge
 MY_LNG = 0.121817
 
