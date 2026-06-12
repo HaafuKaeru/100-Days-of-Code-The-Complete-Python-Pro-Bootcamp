@@ -11,11 +11,25 @@ THEME_COLOR = "#375362"
 
 class QuizInterface:
 
-    def __init__(self, quiz_brain: QuizBrain):
+    def __init__(self, quiz_brain: QuizBrain, topic: str):
         self.quiz = quiz_brain
+        self.topic = topic
         self.window = tk.Tk()
         self.window.title("Quizzler")
         self.window.configure(bg=THEME_COLOR, padx=20, pady=20)
+        self.window.geometry("+1000+500")
+
+        # topic label
+        self.topic_label = tk.Label()
+        self.topic_label.configure(
+            text=f"Topic: "
+                 f"{self.topic.title()}",
+            font=("Arial", 10, "bold"),
+            foreground="white",
+            background=THEME_COLOR,
+            padx=20, pady=20,
+        )
+        self.topic_label.grid(row=0, column=0)
 
         # score label
         self.score_label = tk.Label()
@@ -67,7 +81,13 @@ class QuizInterface:
             q_text = self.quiz.next_question()
             self.canvas.itemconfig(self.question_text, text=q_text)
         else:
-            self.canvas.itemconfig(self.question_text, text=f"You've completed the quiz\n\nYour final score was: {self.quiz.score}/{self.quiz.question_number}")
+            self.canvas.itemconfig(
+                self.question_text,
+                text=f"You've completed the quiz!\n\n"
+                     f"Your final score was: {self.quiz.score}/{self.quiz.question_number}"
+            )
+            self.true_button.configure(state="disabled")
+            self.false_button.configure(state="disabled")
 
     def true_pressed(self):
         self.give_feedback(self.quiz.check_answer("True"))
