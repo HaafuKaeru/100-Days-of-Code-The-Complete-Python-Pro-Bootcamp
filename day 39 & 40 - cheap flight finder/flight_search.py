@@ -5,7 +5,7 @@ import numpy as np
 
 
 SERPAPI_API_URL = "https://serpapi.com/search?engine=google "
-SERPAPI_API_KEY = "0777257cd5eadbd3f9e79c2cbb92ceb13d75c3c617d604064cc4a43c423614d2"
+SERPAPI_API_KEY = "xxx"
 
 
 # This class is responsible for talking to the Flight Search API.
