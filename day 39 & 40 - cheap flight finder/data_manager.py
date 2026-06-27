@@ -16,11 +16,11 @@ class DataManager:
         self.data = None
 
     def api_get(self, use_cache=True) -> list[dict]:
+        if not use_cache:
+            requests_cache.clear()
         header = {
             "Authorization": f"Bearer {os.getenv('SHEETY_WORKOUT_API_BEARER_TOKEN')}"
         }
-        if not use_cache:
-            requests_cache.clear()
         rsp = requests.get(
             url=SHEETY_API_URL,
             headers=header,

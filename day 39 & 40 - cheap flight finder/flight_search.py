@@ -1,12 +1,16 @@
 import requests
 import requests_cache
-from datetime import datetime
+import os
 import numpy as np
+from datetime import datetime
 
 
 SERPAPI_API_URL = "https://serpapi.com/search?engine=google "
-SERPAPI_API_KEY = "xxx"
+# to add env variables in windows ps, run this in pycharm terminal or elevated ps and restart pycharm
+# [System.Environment]::SetEnvironmentVariable("VARIABLE", "VALUE", "User")
 
+# create requests caches for testing -> can this become a decorator?
+requests_cache.install_cache('serpapi_cache')
 
 # This class is responsible for talking to the Flight Search API.
 class FlightSearch:
@@ -17,21 +21,32 @@ class FlightSearch:
         self.outbound_date = None
         self.return_date = None
         self.search_period_limit = None
+        self.api_key = os.getenv("SERPAPI_API_KEY")
+        self.get_dates()
 
     def get_dates(self):
-        now = datetime.now()
-        self.outbound_date = now.date()
-        six_months_later = np.add(
-            np.datetime64(self.outbound_date),
-            np.timedelta64(6, "M"),
-            casting="unsafe"
-        )
+        tomorrow = self.calculate_date(1, "D")
+        self.outbound_date = tomorrow
+        n_days_later  = self.calculate_date(self.stay_length, "D")
+        self.return_date = n_days_later
+        six_months_later = self.calculate_date(6, "M")
         self.search_period_limit = six_months_later
 
-    def api_get(self, search_params: list[dict]):
+    def calculate_date(self, amount: int, datetype: str):
+        later = np.add(
+            np.datetime64(datetime.now().date()),
+            np.timedelta64(amount, datetype),
+            casting="unsafe"
+        )
+        return later
+
+    def api_get(self, search_params: list[dict], use_cache=True):
+        if not use_cache:
+            requests_cache.clear()
         for entry in search_params:
             get_params = {
                 "engine": "google_flights",
+                "api_key": self.api_key,
                 "hl": "en",
                 "gl": "uk",
                 "type": "1",
@@ -40,4 +55,10 @@ class FlightSearch:
                 "outbound_date": self.outbound_date,
                 "return_date": self.return_date,
                 "currency": "GBP",
+                "sort_by": "2",  # cheapest
+                "show_hidden": "true",
             }
+            rsp = requests.get(url=SERPAPI_API_URL, params=get_params)
+            rsp.raise_for_status()
+            print(f"Source: {'CACHE' if getattr(rsp, 'from_cache', False) else 'API'}")
+            return rsp.json()["other_flights"][0]  # we already sorted for cheapest so just get the first element

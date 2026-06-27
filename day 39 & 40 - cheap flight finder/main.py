@@ -1,6 +1,7 @@
 from data_manager import DataManager
 from notification_manager import NotificationManager
 from flight_search import FlightSearch
+from flight_data import FlightData
 
 
 def main():
@@ -9,11 +10,17 @@ def main():
     print(sheet_data)
 
     flight_search = FlightSearch()
-    flight_search.get_dates()
+    search_result = flight_search.api_get(sheet_data, use_cache=True)
+    print(search_result)
+
+    flight_data = FlightData(search_result)
+    data = flight_data.format_info()
+    print(data)
 
     notification_manager = NotificationManager()
-    message = "This is an automated message"
-    # notification_manager.api_post(message)
+    message = (f"Flight Alert!\n"
+               f"Only £{data['price']} to fly from {data['from']} to {data['to']} on {data['time']}")
+    notification_manager.api_post(message)
 
 
 if __name__ == '__main__':
