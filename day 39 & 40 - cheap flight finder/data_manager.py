@@ -1,10 +1,10 @@
 import requests
 import requests_cache
 import os
+from dotenv import load_dotenv
 
 
-SHEETY_API_URL = "https://api.sheety.co/925e10e3babdda0a58045a4347d329a9/cheapFlightsFromLondon/sheet1"
-
+load_dotenv(dotenv_path="../../../.env")
 
 # create requests caches for testing -> can this become a decorator?
 requests_cache.install_cache('sheety_cache')
@@ -14,18 +14,33 @@ class DataManager:
 
     def __init__(self):
         self.data = None
+        self.bearer_token = os.getenv('SHEETY_CHEAP_FLIGHTS_API_BEARER_TOKEN')
+        self.sheet_prices_url = os.getenv('SHEETY_CHEAP_FLIGHTS_PRICES_API_URL')
+        self.sheet_users_url = os.getenv('SHEETY_CHEAP_FLIGHTS_USERS_API_URL')
+        self.header = {
+            "Authorization": f"Bearer {self.bearer_token}"
+        }
 
-    def api_get(self, use_cache=True) -> list[dict]:
+    def get_required_flights(self, use_cache=True) -> list[dict]:
         if not use_cache:
             requests_cache.clear()
-        header = {
-            "Authorization": f"Bearer {os.getenv('SHEETY_WORKOUT_API_BEARER_TOKEN')}"
-        }
         rsp = requests.get(
-            url=SHEETY_API_URL,
-            headers=header,
+            url=self.sheet_prices_url,
+            headers=self.header,
         )
         rsp.raise_for_status()
         print(f"Source: {'CACHE' if getattr(rsp, 'from_cache', False) else 'API'}")
-        self.data = rsp.json()["sheet1"]
+        self.data = rsp.json()["prices"]
+        return self.data
+
+    def get_customer_emails(self, use_cache=True):
+        if not use_cache:
+            requests_cache.clear()
+        rsp = requests.get(
+            url=self.sheet_users_url,
+            headers=self.header,
+        )
+        rsp.raise_for_status()
+        print(f"Source: {'CACHE' if getattr(rsp, 'from_cache', False) else 'API'}")
+        self.data = rsp.json()["users"]
         return self.data

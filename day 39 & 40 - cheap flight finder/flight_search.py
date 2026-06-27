@@ -3,11 +3,11 @@ import requests_cache
 import os
 import numpy as np
 from datetime import datetime
+from dotenv import load_dotenv
 
 
 SERPAPI_API_URL = "https://serpapi.com/search?engine=google "
-# to add env variables in windows ps, run this in pycharm terminal or elevated ps and restart pycharm
-# [System.Environment]::SetEnvironmentVariable("VARIABLE", "VALUE", "User")
+load_dotenv("../../.env")
 
 # create requests caches for testing -> can this become a decorator?
 requests_cache.install_cache('serpapi_cache')
@@ -17,7 +17,7 @@ class FlightSearch:
 
     def __init__(self):
         self.departure = "STN"  # London Stansted
-        self.stay_length = 7  # days
+        self.stay_length = 14  # days
         self.outbound_date = None
         self.return_date = None
         self.search_period_limit = None
@@ -40,9 +40,10 @@ class FlightSearch:
         )
         return later
 
-    def api_get(self, search_params: list[dict], use_cache=True):
+    def api_get(self, search_params: list[dict], use_cache=True) -> list:
         if not use_cache:
             requests_cache.clear()
+        results = []
         for entry in search_params:
             get_params = {
                 "engine": "google_flights",
@@ -61,4 +62,5 @@ class FlightSearch:
             rsp = requests.get(url=SERPAPI_API_URL, params=get_params)
             rsp.raise_for_status()
             print(f"Source: {'CACHE' if getattr(rsp, 'from_cache', False) else 'API'}")
-            return rsp.json()["other_flights"][0]  # we already sorted for cheapest so just get the first element
+            results.append(rsp.json()["other_flights"][0])  # we already sorted for cheapest so just get the first element
+        return results
