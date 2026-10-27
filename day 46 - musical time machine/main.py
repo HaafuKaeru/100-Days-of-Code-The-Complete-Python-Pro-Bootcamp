@@ -14,8 +14,9 @@ BILLBOARD_REAL_URL = "https://www.billboard.com/charts/hot-100/"
 
 def main():
 
-    # date = input("Which year do you want to travel to? Type the date in YYYY-MM-DD format: ")
-    date = "2014-10-18"
+    date = input("Welcome to the Musical Time Machine!\n"
+                 "Which year do you want to travel to? Type the date in YYYY-MM-DD format: ")
+    # date = "2014-10-18"
 
     rsp = requests.get(
         url=f"{BILLBOARD_MOCK_URL}{date}/",
