@@ -51,6 +51,8 @@ while elapsed < challenge_duration:
                         highest_product = product
                 # buy the highest price product
                 highest_product.click()
+            else:
+                continue
             shop_checked = True
     else:
         shop_checked = False
