@@ -1,4 +1,5 @@
 **/.cache
 **/.env
 **/__pycache__/
+**/chrome_profile
 .idea/
