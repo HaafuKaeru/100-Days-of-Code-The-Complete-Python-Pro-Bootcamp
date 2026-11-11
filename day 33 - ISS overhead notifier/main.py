@@ -1,7 +1,11 @@
 import requests
 import datetime as dt
 import smtplib
+import os
+import dotenv
 
+
+dotenv.load_dotenv("../.env")
 
 ISS_POSITION_API = "http://api.open-notify.org/iss-now.json"
 SUNRISE_SUNSET_API = "https://api.sunrise-sunset.org/json"
@@ -9,10 +13,10 @@ SUNRISE_SUNSET_API = "https://api.sunrise-sunset.org/json"
 MY_LAT = 52.205338 # cambridge
 MY_LNG = 0.121817
 
-MY_EMAIL = "pythont090.test@gmail.com"
-TARGET_EMAIL = "flavioryu@gmail.com"
-MY_PASSWORD = "xxx"
-SMTP_ADDRESS = "smtp.gmail.com"
+MY_EMAIL = os.getenv("my_test_email")
+TARGET_EMAIL = os.getenv("my_email")
+MY_PASSWORD = os.getenv("my_test_email_pass")
+SMTP_ADDRESS = os.getenv("smtp_address")
 
 
 def is_iss_close() -> bool:

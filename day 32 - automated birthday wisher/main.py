@@ -3,11 +3,15 @@ import datetime as dt
 import pandas as pd
 import random
 import smtplib
+import os
+import dotenv
 
 
-MY_EMAIL = "pythont090.test@gmail.com"
-MY_PASSWORD = "xxx"
-SMTP_ADDRESS = "smtp.gmail.com"
+dotenv.load_dotenv("../.env")
+
+MY_EMAIL = os.getenv("my_test_email")
+MY_PASSWORD = os.getenv("my_test_email_pass")
+SMTP_ADDRESS = os.getenv("smtp_address")
 
 # 1. Update the birthdays.csv -> Done
 

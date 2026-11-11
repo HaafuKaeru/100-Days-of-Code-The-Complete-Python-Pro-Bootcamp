@@ -1,1 +1,0 @@
-# The project was to improve the day 29 password manager app!
