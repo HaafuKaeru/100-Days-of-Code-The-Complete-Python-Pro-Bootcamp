@@ -1,6 +1,5 @@
 from flask import Flask, render_template
 from flask_wtf import FlaskForm
-from scipy.stats import bootstrap
 from wtforms import EmailField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Email, Length
 from flask_bootstrap import Bootstrap4
