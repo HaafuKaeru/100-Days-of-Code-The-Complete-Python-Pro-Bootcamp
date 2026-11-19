@@ -5,3 +5,5 @@
 **/__pycache__/
 **/chrome_profile
 .idea/
+.postman/
+postman/
